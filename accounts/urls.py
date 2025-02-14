@@ -1,9 +1,7 @@
-from .views import index, test_email
-from django.urls import path, include
-from django.contrib import admin
+from .views import index
+from django.urls import path
 
 
 urlpatterns = [
-    path('protected-route/', index),
-    path('test-email/', test_email, name='test-email')
+     path('protected-route/', index)
 ]

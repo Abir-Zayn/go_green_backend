@@ -15,11 +15,17 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, include, re_path
+from django.views.generic import TemplateView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/v1/', include('accounts.urls')),
-    path('api/v1/', include('djoser.urls')),
-    path('api/v1/', include('djoser.urls.jwt'))
+    path('auth/', include('djoser.urls')),
+    path('auth/', include('djoser.urls.jwt')),
+    # Add custom activation URL pattern
+    re_path(r'^auth/users/activation/(?P<uid>[\w-]+)/(?P<token>[\w-]+)/?$',
+            TemplateView.as_view(template_name="activation.html"),
+            name='user-activation')
+
+    
 ]

@@ -34,22 +34,21 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'djoser',
-    'jazzmin',
+    "jazzmin",
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'static',
-    'rest_framework',
-    'rest_framework_simplejwt',
-    'rest_framework_simplejwt.token_blacklist',
-    'rest_framework.authtoken',
-    'accounts',
-    'django_mailgun'
+    "rest_framework",
+    "djoser",
+    "rest_framework_simplejwt",
+    "rest_framework_simplejwt.token_blacklist",
+    "rest_framework.authtoken",
+    "accounts",
 ]
+
 
 
 REST_FRAMEWORK = {
@@ -73,20 +72,29 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'go_green_backend.urls'
 
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "localhost" # smtp.office365.com
+EMAIL_PORT = "1025" # 587
+EMAIL_HOST_USER = "" # Your outlook email address
+EMAIL_HOST_PASSWORD = "" # Your outlook email password
+EMAIL_USE_TLS = False
+
 
 # JWT settings
 SIMPLE_JWT = {
     'AUTH_HEADER_TYPES': ('Bearer',),
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=50),
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
     'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
-
+    'BLACKLIST_AFTER_ROTATION': True,
 }
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            BASE_DIR / "templates",
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -189,34 +197,27 @@ JAZZMIN_SETTINGS = {
 
 
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.office365.com'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'abirzayn561@gmail.com'
-EMAIL_HOST_PASSWORD = 'sbsscdoshzhcvzcp'
-DEFAULT_FROM_EMAIL = 'abirzayn561@gmail.com'
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "localhost"
+EMAIL_PORT = "1025" 
+EMAIL_HOST_USER = "" 
+EMAIL_HOST_PASSWORD = "" 
+EMAIL_USE_TLS = False
 
-# # MAILGUN_ACCESS_KEY = "4faa20d7e1c8c20afc810dc51fef9779-1654a412-4ce396a6"
-# # MAILGUN_SERVER_NAME = "sandbox98c24b2bc6df44c1a65392ab4687b86f.mailgun.org"
-# DEFAULT_FROM_EMAIL = "noreply@sandbox98c24b2bc6df44c1a65392ab4687b86f.mailgun.org"
-# SERVER_EMAIL = "noreply@sandbox98c24b2bc6df44c1a65392ab4687b86f.mailgun.org"
-
-DJOSER ={
+DJOSER = {
     'LOGIN_FIELD': 'email',
     'USER_CREATE_PASSWORD_RETYPE': True,
     'USERNAME_CHANGED_EMAIL_CONFIRMATION': True,
     'PASSWORD_CHANGED_EMAIL_CONFIRMATION': True,
     'SEND_CONFIRMATION_EMAIL': True,
-    'USERNAME_RESET_CONFIRM_URL': 'email/reset/confirm/?uid={uid}&token={token}',
-    'PASSWORD_RESET_CONFIRM_URL': 'password/reset/confirm/?uid={uid}&token={token}',
+    'USERNAME_RESET_CONFIRM_URL': 'password/reset/confirm/{uid}/{token}',
+    'PASSWORD_RESET_CONFIRM_URL': 'password/reset/confirm/{uid}/{token}',
+    'ACTIVATION_URL': 'auth/users/activation/{uid}/{token}',  # Changed from 'auth/activate/{uid}/{token}'
     'SEND_ACTIVATION_EMAIL': True,
     'USER_DELETE_PASSWORD': False,
     'PASSWORD_RESET_SHOW_EMAIL_NOT_FOUND': True,
-    'ACTIVATION_URL': 'auth/activate/{uid}/{token}',
     'SERIALIZERS': {
         'user_create': 'accounts.serializers.UserCreateSerializer',
-    }
+    },
 }
-DOMAIN = 'localhost:3000'
-SITE_NAME = 'Go Green'
+
