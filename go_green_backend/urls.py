@@ -25,7 +25,6 @@ urlpatterns = [
     # Add custom activation URL pattern
     re_path(r'^auth/users/activation/(?P<uid>[\w-]+)/(?P<token>[\w-]+)/?$',
             TemplateView.as_view(template_name="activation.html"),
-            name='user-activation')
-
-    
+            name='user-activation'),
+    path('api/', include('accounts.urls'))
 ]

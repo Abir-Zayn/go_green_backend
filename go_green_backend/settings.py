@@ -28,7 +28,8 @@ SECRET_KEY = 'django-insecure-+zj$#@i2_d61=+xp7u9ahs1xmcl8b0_5d1vo#r7wxu4vp2c@i-
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1', '10.0.2.2', '192.168.x.x', 'localhost']
+
 
 
 # Application definition
@@ -47,6 +48,7 @@ INSTALLED_APPS = [
     "rest_framework_simplejwt.token_blacklist",
     "rest_framework.authtoken",
     "accounts",
+    "corsheaders"
 ]
 
 
@@ -60,15 +62,6 @@ REST_FRAMEWORK = {
     ],
 }
 
-MIDDLEWARE = [
-    'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
-]
 
 ROOT_URLCONF = 'go_green_backend.urls'
 
@@ -83,8 +76,8 @@ EMAIL_USE_TLS = False
 # JWT settings
 SIMPLE_JWT = {
     'AUTH_HEADER_TYPES': ('Bearer',),
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=2),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=5),
     'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
     'BLACKLIST_AFTER_ROTATION': True,
 }
@@ -138,8 +131,17 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
-
-# AUTH_USER_MODEL = 'accounts.AppUser'
+MIDDLEWARE = [
+    'django.middleware.security.SecurityMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware'
+]
+CORS_ALLOW_ALL_ORIGINS = True
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
@@ -195,14 +197,6 @@ JAZZMIN_SETTINGS = {
     "related_modal_active": True,  # Enable related object popups
 }
 
-
-
-EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-EMAIL_HOST = "localhost"
-EMAIL_PORT = "1025" 
-EMAIL_HOST_USER = "" 
-EMAIL_HOST_PASSWORD = "" 
-EMAIL_USE_TLS = False
 
 DJOSER = {
     'LOGIN_FIELD': 'email',
